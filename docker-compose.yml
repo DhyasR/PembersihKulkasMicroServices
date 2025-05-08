@@ -1,63 +1,63 @@
 version: '3.8'
 
 services:
+  api_gateway:
+    build: ./api-gateway
+    container_name: api_gateway
+    ports:
+      - 8080:8080
+    networks:
+      - app_network
+
+  homepage:
+    build: ./homepage
+    container_name: homepage_service
+    networks:
+      - app_network
+
+  chat:
+    build: ./chat
+    container_name: chat_service
+    environment:
+      - FIREBASE_CONFIG=your_firebase_chat_config
+    networks:
+      - app_network
+
+  kulkasku:
+    build: ./kulkasku
+    container_name: kulkasku_service
+    environment:
+      - FIREBASE_CONFIG=your_firebase_kulkasku_config
+    networks:
+      - app_network
+
+  profile:
+    build: ./profile
+    container_name: profile_service
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=rootpassword123
+      - DB_NAME=profile_db
+    depends_on:
+      - db
+    networks:
+      - app_network
+
   db:
     image: mariadb
     container_name: db
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=rootpassword123
-      - MYSQL_DATABASE=app_db
-      - MYSQL_USER=app_user
-      - MYSQL_PASSWORD=app_password
+      - MYSQL_DATABASE=profile_db
     volumes:
       - db_data:/var/lib/mysql
     networks:
       - app_network
 
-  phpmyadmin:
-    image: phpmyadmin
-    container_name: phpmyadmin
-    restart: always
-    ports:
-      - 2222:80
-    environment:
-      - PMA_HOST=db
-      - MYSQL_ROOT_PASSWORD=rootpassword123
-    depends_on:
-      - db
-    networks:
-      - app_network
-
-  laravel:
-    build:
-      context: ./laravel
-      dockerfile: Dockerfile
-    container_name: laravel_app
-    ports:
-      - 8000:8000
-    volumes:
-      - ./laravel:/var/www/html
-    depends_on:
-      - db
-    networks:
-      - app_network
-
-  nodejs:
-    build:
-      context: ./node
-      dockerfile: Dockerfile
-    container_name: node_app
-    ports:
-      - 3000:3000
-    volumes:
-      - ./node:/usr/src/app
-    networks:
-      - app_network
-
 volumes:
   db_data:
-
 
 networks:
   app_network:
