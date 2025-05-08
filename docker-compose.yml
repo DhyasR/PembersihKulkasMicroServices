@@ -16,7 +16,7 @@ services:
       - app_network
 
   chat:
-    build: ./chat
+    build: ./chatpage
     container_name: chat_service
     environment:
       - FIREBASE_CONFIG=your_firebase_chat_config
@@ -24,7 +24,7 @@ services:
       - app_network
 
   kulkasku:
-    build: ./kulkasku
+    build: ./kulkaskupage
     container_name: kulkasku_service
     environment:
       - FIREBASE_CONFIG=your_firebase_kulkasku_config
@@ -32,7 +32,7 @@ services:
       - app_network
 
   profile:
-    build: ./profile
+    build: ./profilepage
     container_name: profile_service
     environment:
       - DB_HOST=db
