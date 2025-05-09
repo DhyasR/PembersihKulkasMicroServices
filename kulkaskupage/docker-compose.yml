@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  laravel:
+    image: bitnami/laravel
+    container_name: kulkas-laravel
+    restart: always
+    ports:
+      - "8200:8000"
+    environment:
+      - LARAVEL_DB_HOST=db:3306
+      - LARAVEL_DB_USER=laravel_user
+      - LARAVEL_DB_PASSWORD=laravel_password
+      - LARAVEL_DB_NAME=laravel
+    volumes:
+      - laravel_data:/app
+    networks:
+      - app_network
+
+volumes:
+  laravel_data:
+
+
+networks:
+  app_network:
+    external: true
