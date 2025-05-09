@@ -1,0 +1,13 @@
+{
+    "name": "chat",
+    "version": "1.0.0",
+    "description": "Chat service",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "express": "^4.18.2",
+        "firebase-admin": "^11.10.1"
+    }
+}

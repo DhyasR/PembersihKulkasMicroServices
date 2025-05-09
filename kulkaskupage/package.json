@@ -1,0 +1,8 @@
+{
+    "name": "kulkasku/project",
+    "description": "Microservice kulkasku",
+    "require": {
+        "php": "^8.2",
+        "laravel/framework": "^10.0"
+    }
+}

@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   api_gateway:
-    build: ./api-gateway
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
     container_name: api_gateway
     ports:
       - 8080:8080
@@ -58,6 +60,7 @@ services:
 
 volumes:
   db_data:
+
 
 networks:
   app_network:
