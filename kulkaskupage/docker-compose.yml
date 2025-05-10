@@ -1,25 +1,22 @@
 version: '3.8'
 
 services:
-  laravel:
-    image: bitnami/laravel
-    container_name: kulkas-laravel
+  golang:
+    image: golang
+    container_name: kulkasku-golang
     restart: always
+    working_dir: /app
+    volumes:
+      - .:/app
+    command: go run main.go
     ports:
       - "8200:8000"
     environment:
-      - LARAVEL_DB_HOST=db:3306
-      - LARAVEL_DB_USER=laravel_user
-      - LARAVEL_DB_PASSWORD=laravel_password
-      - LARAVEL_DB_NAME=laravel
-    volumes:
-      - laravel_data:/app
-    networks:
-      - app_network
-
-volumes:
-  laravel_data:
-
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=laravel_user
+      - DB_PASSWORD=laravel_password
+      - DB_NAME=laravel
 
 networks:
   app_network:

@@ -16,8 +16,6 @@ services:
       - NODE_DB_USER=root
       - NODE_DB_PASSWORD=yourpassword
       - NODE_DB_NAME=mydatabase
-    networks:
-      - app_network
 
 networks:
   app_network:
