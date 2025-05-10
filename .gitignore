@@ -1,0 +1,76 @@
+# .gitignore for Go Recipe Maker with Firebase
+
+### General ###
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.pid
+*.DS_Store
+*.swp
+*~
+.idea/
+.vscode/
+*.code-workspace
+
+### Go ###
+# Binaries
+/bin/
+/out/
+
+# Dependency directories
+vendor/
+/go/pkg/
+
+# Go workspace file
+go.work
+
+### Firebase ###
+# Service account credentials
+*.json
+/serviceAccountKey.json
+/firebase-config.json
+firebase-service-account.json
+
+### Environment Files ###
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+### Uploads ###
+/uploads/
+!/uploads/.gitkeep  # Keep empty directory
+
+### Logs ###
+*.log
+logs/
+
+### Build Output ###
+/dist/
+/build/
+
+### IDE Specific ###
+# JetBrains
+*.iml
+
+# VS Code
+.settings/
+.history/
+
+### OS Generated ###
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+### Test Files ###
+_coverage/
+*.coverprofile
+
+### Documentation ###
+/docs/_build/
