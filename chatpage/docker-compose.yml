@@ -1,18 +1,29 @@
 version: '3.8'
 
 services:
-  nodejs:
-    image: bitnami/node
-    container_name: chat-nodejs
-    restart: always
+  go-app:
+    image: golang
+    container_name: recipe-maker-go
+    restart: unless-stopped
     working_dir: /app
     volumes:
       - .:/app
-      - ./serviceAccountKey.json:/app/serviceAccountKey.json
+      - ./firebase-adminsdk.json:/app/firebase-adminsdk.json
     ports:
-      - "8080:3000"
+      - "8080:8080"
     environment:
-      - GOOGLE_APPLICATION_CREDENTIALS=/app/serviceAccountKey.json
+      - GOOGLE_APPLICATION_CREDENTIALS=firebase-adminsdk.json
+    secrets:
+      - source: openai_key
+        target: openai_key.txt
+        mode: 444
+    command: >
+      sh -c "go mod download && 
+             go run main.go"
+
+secrets:
+  openai_key:
+    file: ./openai_key.txt
 
 networks:
   app_network:

@@ -1,4 +1,3 @@
-// handlers/openai.go
 package handlers
 
 import (
@@ -10,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"chatpage/firebase"
@@ -23,6 +23,7 @@ type OpenAIRequest struct {
 	Model       string    `json:"model"`
 	Messages    []Message `json:"messages"`
 	Temperature float32   `json:"temperature,omitempty"`
+	MaxTokens   int       `json:"max_tokens,omitempty"`
 }
 
 type Message struct {
@@ -52,11 +53,39 @@ type Ingredient struct {
 	Notes    string `json:"notes,omitempty"`
 }
 
+func getOpenAIKey() (string, error) {
+	// Try reading from Docker secret first
+	if key, err := os.ReadFile("/run/secrets/openai_key.txt"); err == nil {
+		return strings.TrimSpace(string(key)), nil
+	}
+
+	// Fallback to environment variable (for development)
+	// if key := os.Getenv("OPENAI_API_KEY"); key != "" {
+	// 	return key, nil
+	// }
+
+	return "", fmt.Errorf("OpenAI API key not found in secrets or environment variables")
+}
+
+func extractJSONFromResponse(response string) (string, error) {
+	cleanJSON := strings.TrimPrefix(response, "```json")
+	cleanJSON = strings.TrimPrefix(cleanJSON, "```")
+	cleanJSON = strings.TrimSpace(cleanJSON)
+
+	if !strings.HasPrefix(cleanJSON, "{") || !strings.HasSuffix(cleanJSON, "}") {
+		return "", fmt.Errorf("invalid JSON format in AI response")
+	}
+
+	return cleanJSON, nil
+}
+
 func GenerateRecipe(c *gin.Context) {
-	// Get OpenAI API key from environment
-	openaiKey := os.Getenv("OPENAI_API_KEY")
-	if openaiKey == "" {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "OpenAI API key not configured"})
+	openaiKey, err := getOpenAIKey()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "OpenAI API key configuration error",
+			"details": err.Error(),
+		})
 		return
 	}
 
@@ -76,7 +105,7 @@ func GenerateRecipe(c *gin.Context) {
 	prompt := fmt.Sprintf(
 		`Create a detailed recipe using these ingredients: %v.
 		Cuisine style: %s. Dietary restrictions: %s.
-		Provide the recipe in JSON format with these exact field names:
+		Provide the recipe in this exact JSON format without any additional text or markdown:
 		{
 			"name": "Recipe name",
 			"ingredients": [
@@ -89,20 +118,18 @@ func GenerateRecipe(c *gin.Context) {
 			],
 			"steps": ["step 1", "step 2"],
 			"estimated_time": "cooking time"
-		}
-		Return ONLY the JSON object, without any additional text or explanation.`,
+		}`,
 		request.Ingredients,
 		request.Cuisine,
 		request.Diet,
 	)
 
-	// Create OpenAI request
 	openaiReq := OpenAIRequest{
 		Model: "gpt-3.5-turbo",
 		Messages: []Message{
 			{
 				Role:    "system",
-				Content: "You are a helpful chef assistant that creates detailed recipes in JSON format.",
+				Content: "You are a helpful chef assistant that creates detailed recipes in strict JSON format.",
 			},
 			{
 				Role:    "user",
@@ -110,6 +137,7 @@ func GenerateRecipe(c *gin.Context) {
 			},
 		},
 		Temperature: 0.7,
+		MaxTokens:   1000,
 	}
 
 	reqBody, err := json.Marshal(openaiReq)
@@ -166,13 +194,25 @@ func GenerateRecipe(c *gin.Context) {
 		return
 	}
 
-	// Parse the recipe from AI response
-	var aiRecipe AIRecipe
-	if err := json.Unmarshal([]byte(openaiResp.Choices[0].Message.Content), &aiRecipe); err != nil {
+	// Extract and clean JSON from response
+	jsonContent, err := extractJSONFromResponse(openaiResp.Choices[0].Message.Content)
+	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error":       "Failed to parse recipe",
+			"error":       "Failed to extract JSON from AI response",
 			"ai_response": openaiResp.Choices[0].Message.Content,
 			"details":     err.Error(),
+		})
+		return
+	}
+
+	// Parse the recipe
+	var aiRecipe AIRecipe
+	if err := json.Unmarshal([]byte(jsonContent), &aiRecipe); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":        "Failed to parse recipe",
+			"ai_response":  openaiResp.Choices[0].Message.Content,
+			"json_content": jsonContent,
+			"details":      err.Error(),
 		})
 		return
 	}
