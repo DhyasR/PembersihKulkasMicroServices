@@ -54,15 +54,9 @@ type Ingredient struct {
 }
 
 func getOpenAIKey() (string, error) {
-	// Try reading from Docker secret first
 	if key, err := os.ReadFile("/run/secrets/openai_key.txt"); err == nil {
 		return strings.TrimSpace(string(key)), nil
 	}
-
-	// Fallback to environment variable (for development)
-	// if key := os.Getenv("OPENAI_API_KEY"); key != "" {
-	// 	return key, nil
-	// }
 
 	return "", fmt.Errorf("OpenAI API key not found in secrets or environment variables")
 }
