@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  spoonacular-service:
+    build: .
+    ports:
+      - "3000:3000"
+    secrets:
+      - source: spoonacular_key
+        target: spoonacular_key.txt
+
+secrets:
+  spoonacular_key:
+    file: ./secret/spoonacular_key.txt
