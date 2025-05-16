@@ -6,7 +6,7 @@ const app = express();
 const port = 3000;
 
 // Read API key from Docker secret
-const apiKeyPath = '/run/secrets/spoonacular_key.txt';
+const apiKeyPath = '/run/secrets/spoonacular_key';
 const spoonacularKey = fs.readFileSync(apiKeyPath, 'utf-8').trim();
 
 app.get('/recipes', async (req, res) => {

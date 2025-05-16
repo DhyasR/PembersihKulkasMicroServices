@@ -1,14 +1,43 @@
-version: '3.8'
+
+# services:
+#   nodejs:
+#     image: bitnami/node
+#     container_name: homepage-nodejs
+#     # restart: always
+#     working_dir: /app
+#     volumes:
+#       - .:/app
+#     ports:
+#       - "8010:3000"
+#     environment:
+#       - NODE_DB_HOST=db
+#       - NODE_DB_PORT=3306
+#       - NODE_DB_USER=root
+#       - NODE_DB_PASSWORD=yourpassword
+#       - NODE_DB_NAME=mydatabase
+#       - SPOONACULAR_API_KEY=/run/secrets/spoonacular_key # Mengakses secret sebagai variabel lingkungan
+
+# networks:
+#   app_network:
+#     external: true
 
 services:
-  spoonacular-service:
-    build: .
+  homepage:
+    image: node:18
+    container_name: homepage
+    restart: always
+    working_dir: /app
+    volumes:
+      - .:/app
     ports:
       - "3000:3000"
+    command: sh -c "npm install && npm start"
     secrets:
-      - source: spoonacular_key
-        target: spoonacular_key.txt
+      - spoonacular_key
+    environment:
+      - NODE_ENV=development
 
 secrets:
   spoonacular_key:
-    file: ./secret/spoonacular_key.txt
+    file: ./spoonacular_key.txt
+
