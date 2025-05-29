@@ -7,7 +7,7 @@ COMPOSE_PATHS=(
   "./api-gateway"
   "./chatpage"
   "./homepage"
-  "./kulkaskupage"
+  "./kulkasku"
   "./profilepage"
 )
 

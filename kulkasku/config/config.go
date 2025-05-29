@@ -12,7 +12,6 @@ type Config struct {
 
 func LoadConfig() *Config {
 	return &Config{
-		OpenAIKey:      os.Getenv("OPENAI_API_KEY"),
 		FirebaseConfig: os.Getenv("FIREBASE_CONFIG"),
 	}
 }
