@@ -16,23 +16,23 @@ services:
       - app_network
 
   api_gateway:
-    image: bitnami/node
-    container_name: api-gateway
+    image: node
+    container_name: homepage
     restart: always
     working_dir: /app
     volumes:
       - .:/app
     ports:
-      - "3000:3000"
-    depends_on:
-      - db
+      - "3001:3001"
+    command: sh -c "npm install && npm start"
+    secrets:
+      - spoonacular_key
     environment:
-      - DB_HOST=db
-      - DB_PORT=3306
-      - DB_USER=laravel_user
-      - DB_PASSWORD=laravel_password
-      - DB_NAME=laravel
-    command: node index.js
+      - NODE_ENV=development
+
+secrets:
+  spoonacular_key:
+    file: ./spoonacular_key.txt
 
 volumes:
   db_data:
