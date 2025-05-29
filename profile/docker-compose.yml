@@ -1,8 +1,22 @@
 version: '3.8'
 
 services:
+  db:
+    image: mariadb
+    container_name: db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword123
+      - MYSQL_DATABASE=laravel
+      - MYSQL_USER=laravel_user
+      - MYSQL_PASSWORD=laravel_password
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app_network
+
   nodejs:
-    image: bitnami/node
+    image: node
     container_name: profile-nodejs
     restart: always
     working_dir: /app
@@ -18,5 +32,5 @@ services:
       - NODE_DB_NAME=mydatabase
 
 networks:
-  app_network:
+  profile_network:
     external: true

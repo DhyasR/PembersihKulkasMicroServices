@@ -1,20 +1,6 @@
 version: '3.8'
 
 services:
-  db:
-    image: mariadb
-    container_name: db
-    restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=rootpassword123
-      - MYSQL_DATABASE=laravel
-      - MYSQL_USER=laravel_user
-      - MYSQL_PASSWORD=laravel_password
-    volumes:
-      - db_data:/var/lib/mysql
-    networks:
-      - app_network
-
   api_gateway:
     image: node
     container_name: homepage
@@ -41,3 +27,5 @@ volumes:
 networks:
   app_network:
     name: app_network
+  profile_network:
+    name: profile_network
