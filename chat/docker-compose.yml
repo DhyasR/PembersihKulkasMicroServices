@@ -10,7 +10,7 @@ services:
       - .:/app
       - ./firebase-adminsdk.json:/app/firebase-adminsdk.json
     ports:
-      - "8080:8080"
+      - "8100:8100"
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=firebase-adminsdk.json
     secrets:

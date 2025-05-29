@@ -11,7 +11,7 @@ services:
       - ./firebase-adminsdk.json:/app/firebase-adminsdk.json
     command: go run main.go
     ports:
-      - "8200:8000"
+      - "8200:8200"
     environment:
       - DB_HOST=db
       - DB_PORT=3306
