@@ -12,8 +12,6 @@ services:
       - MYSQL_PASSWORD=laravel_password
     volumes:
       - db_data:/var/lib/mysql
-    networks:
-      - app_network
 
   nodejs:
     image: node
@@ -30,6 +28,9 @@ services:
       - NODE_DB_USER=root
       - NODE_DB_PASSWORD=yourpassword
       - NODE_DB_NAME=mydatabase
+
+volumes:
+  db_data:
 
 networks:
   profile_network:

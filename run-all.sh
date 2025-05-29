@@ -5,10 +5,9 @@ set -e
 # Daftar path ke docker-compose.yml
 COMPOSE_PATHS=(
   "./api-gateway"
-  "./chatpage"
-  "./homepage"
+  "./chat"
   "./kulkasku"
-  "./profilepage"
+  "./profile"
 )
 
 for path in "${COMPOSE_PATHS[@]}"; do
