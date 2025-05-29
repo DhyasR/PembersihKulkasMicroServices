@@ -6,7 +6,6 @@ import (
 )
 
 type Config struct {
-	OpenAIKey      string
 	FirebaseConfig string
 }
 
