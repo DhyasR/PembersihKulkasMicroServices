@@ -7,9 +7,9 @@ services:
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=rootpassword123
-      - MYSQL_DATABASE=laravel
-      - MYSQL_USER=laravel_user
-      - MYSQL_PASSWORD=laravel_password
+      - MYSQL_DATABASE=mariadatabase
+      - MYSQL_USER=dbuser
+      - MYSQL_PASSWORD=dbpassword
     volumes:
       - db_data:/var/lib/mysql
 
@@ -20,6 +20,7 @@ services:
     working_dir: /app
     volumes:
       - .:/app
+    command: node index.js
     ports:
       - "8300:8300"
     environment:
