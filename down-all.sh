@@ -12,7 +12,7 @@ COMPOSE_PATHS=(
 
 for path in "${COMPOSE_PATHS[@]}"; do
   echo "🛑 Stopping services in $path"
-  docker-compose -f "$path/docker-compose.yml" down
+  docker-compose -f "$path/docker-compose.yml" down -v
 done
 
 echo "🧹 All services stopped and cleaned up!"
