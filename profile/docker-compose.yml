@@ -6,12 +6,33 @@ services:
     container_name: db
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=rootpassword123
-      - MYSQL_DATABASE=mariadatabase
-      - MYSQL_USER=dbuser
-      - MYSQL_PASSWORD=dbpassword
+      MYSQL_ROOT_PASSWORD: rootpassword123
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbpassword
     volumes:
       - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - profile_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpassword123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      
+    networks:
+    - profile_network 
 
   nodejs:
     image: node
@@ -20,19 +41,22 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-    command: node index.js
+    command: sh -c "npm install mysql2 express && node index.js"
     ports:
       - "8300:8300"
     environment:
-      - NODE_DB_HOST=db
-      - NODE_DB_PORT=3306
-      - NODE_DB_USER=root
-      - NODE_DB_PASSWORD=yourpassword
-      - NODE_DB_NAME=mydatabase
+      NODE_DB_HOST: db
+      NODE_DB_PORT: 3306
+      NODE_DB_USER: root
+      NODE_DB_PASSWORD: rootpassword123
+      NODE_DB_NAME: mydatabase
+    depends_on:
+      - db
+    networks:
+      - profile_network
 
 volumes:
   db_data:
 
 networks:
   profile_network:
-    external: true

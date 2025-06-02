@@ -3,7 +3,7 @@ const fs = require('fs');
 const axios = require('axios');
 
 const app = express();
-const port = 3001;
+const port = 8000;
 
 // Read API key from Docker secret
 const apiKeyPath = '/run/secrets/spoonacular_key';
@@ -29,5 +29,5 @@ app.get('/recipes', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:3001`);
+  console.log(`Server running at http://localhost:8000`);
 });

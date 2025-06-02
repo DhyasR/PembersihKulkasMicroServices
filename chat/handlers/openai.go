@@ -97,21 +97,33 @@ func GenerateRecipe(c *gin.Context) {
 
 	// Build the prompt
 	prompt := fmt.Sprintf(
-		`Create a detailed recipe using these ingredients: %v.
-		Cuisine style: %s. Dietary restrictions: %s.
-		Provide the recipe in this exact JSON format without any additional text or markdown:
+		`You are a strict recipe generator. Only accept valid, edible, commonly available food ingredients. 
+		If any input contains inappropriate, unethical, or non-food items (e.g., human meat, plastic, soap), you must refuse to generate the recipe and respond with an error message.
+
+		Generate a detailed recipe using ONLY these ingredients: %v.  
+		Cuisine style: %s.  
+		Dietary restrictions: %s.
+
+		Before proceeding:
+		- Validate that all ingredients are real, safe, and commonly used in cooking.
+		- Reject any harmful, illegal, unethical, or clearly non-edible inputs.
+		- If invalid ingredients are detected, respond with:
+		  {"error": "Invalid or unsafe ingredient(s) detected. Recipe not generated."}
+
+		If all ingredients are valid, provide the recipe in this **EXACT** JSON format (no markdown, no extra text):
+
 		{
-			"name": "Recipe name",
-			"ingredients": [
-				{
-					"name": "ingredient name",
-					"quantity": "amount",
-					"unit": "unit of measure",
-					"notes": "optional notes"
-				}
-			],
-			"steps": ["step 1", "step 2"],
-			"estimated_time": "cooking time"
+		  "name": "Recipe name",
+		  "ingredients": [
+		    {
+		      "name": "ingredient name",
+		      "quantity": "amount",
+		      "unit": "unit of measure",
+		      "notes": "optional notes"
+		    }
+		  ],
+		  "steps": ["step 1", "step 2"],
+		  "estimated_time": "cooking time"
 		}`,
 		request.Ingredients,
 		request.Cuisine,
