@@ -157,6 +157,6 @@ func main() {
 	router.HandleFunc("/recipes", GetRecipes).Methods("GET")
 	router.HandleFunc("/health", HealthCheck).Methods("GET")
 
-	log.Println("kulkasku service running on port 8000")
-	log.Fatal(http.ListenAndServe(":8000", router))
+	log.Println("kulkasku service running on port 8200")
+	log.Fatal(http.ListenAndServe(":8200", router))
 }

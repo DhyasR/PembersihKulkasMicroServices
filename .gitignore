@@ -12,6 +12,9 @@
 *~
 ._*
 
+### Node.js ###
+node_modules/
+
 ### Development Environments ###
 .idea/
 .vscode/

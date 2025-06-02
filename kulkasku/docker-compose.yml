@@ -11,7 +11,7 @@ services:
       - ./firebase-adminsdk.json:/app/firebase-adminsdk.json
     command: go run main.go
     ports:
-      - "8000:8000"
+      - "8200:8200"
     healthcheck:
       test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8000/health" ]
       interval: 30s
