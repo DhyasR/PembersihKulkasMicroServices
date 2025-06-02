@@ -64,7 +64,13 @@ func getOpenAIKey() (string, error) {
 func extractJSONFromResponse(response string) (string, error) {
 	cleanJSON := strings.TrimPrefix(response, "```json")
 	cleanJSON = strings.TrimPrefix(cleanJSON, "```")
+	cleanJSON = strings.TrimSuffix(cleanJSON, "```") // in case there's a closing triple backtick
 	cleanJSON = strings.TrimSpace(cleanJSON)
+
+	// Special handling for expected error format
+	if strings.Contains(cleanJSON, `"error": "Invalid or unsafe ingredient(s) detected. Recipe not generated."`) {
+		return cleanJSON, nil
+	}
 
 	if !strings.HasPrefix(cleanJSON, "{") || !strings.HasSuffix(cleanJSON, "}") {
 		return "", fmt.Errorf("invalid JSON format in AI response")
