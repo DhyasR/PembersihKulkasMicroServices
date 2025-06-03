@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   golang:
-    image: golang
+    image: golang:alpine
     container_name: kulkasku-golang
     restart: always
     working_dir: /app

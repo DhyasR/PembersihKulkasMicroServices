@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   api_gateway:
-    image: node
+    image: node:alpine
     container_name: api_gateway
     restart: always
     working_dir: /app

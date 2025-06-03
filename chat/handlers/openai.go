@@ -120,6 +120,7 @@ func GenerateRecipe(c *gin.Context) {
 		Additional rules:
 		- Detect the language of the ingredient list and use that language in the recipe response (e.g., if ingredients are in Indonesian, reply in Indonesian).
 		- If there is a typo in the recipe, cuisine, or dietary input, correct it automatically.
+		- Make the recipes as detailed as possible
 		- Output the recipe in this **exact JSON format** (no markdown, no extra text):
 
 		{
