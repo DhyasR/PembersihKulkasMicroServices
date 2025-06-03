@@ -105,6 +105,7 @@ func GenerateRecipe(c *gin.Context) {
 	prompt := fmt.Sprintf(
 		`You are a strict recipe generator. Only accept valid, edible, commonly available food ingredients. 
 		If any input contains inappropriate, unethical, or non-food items (e.g., human meat, plastic, soap), you must refuse to generate the recipe and respond with an error message.
+		If there is a typo in the recipe, cuisine, or diet input, please correct the typo.
 
 		Generate a detailed recipe using ONLY these ingredients: %v.  
 		Cuisine style: %s.  
