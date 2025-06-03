@@ -2,31 +2,33 @@ version: '3.8'
 
 services:
   db:
-    image: mariadb
+    image: mariadb:latest
     container_name: db
     restart: always
+    env_file: .env
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword123
-      MYSQL_DATABASE: mydatabase
-      MYSQL_USER: dbuser
-      MYSQL_PASSWORD: dbpassword
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql 
     ports:
       - "3306:3306"
     networks:
       - profile_network
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpassword123" ]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u${MYSQL_USER}", "-p${MYSQL_PASSWORD}"]
       interval: 10s
       timeout: 5s
       retries: 5
 
   phpmyadmin:
-    image: phpmyadmin
+    image: phpmyadmin/phpmyadmin
     restart: always
     ports:
-      - "8080:80"
+      - "8081:80"
     environment:
       PMA_HOST: db
       PMA_PORT: 3306
@@ -44,12 +46,13 @@ services:
     command: sh -c "npm install mysql2 express && node index.js"
     ports:
       - "8300:8300"
+    env_file: .env
     environment:
-      NODE_DB_HOST: db
-      NODE_DB_PORT: 3306
-      NODE_DB_USER: root
-      NODE_DB_PASSWORD: rootpassword123
-      NODE_DB_NAME: mydatabase
+      NODE_DB_HOST: ${NODE_DB_HOST}
+      NODE_DB_PORT: ${NODE_DB_PORT}
+      NODE_DB_USER: ${NODE_DB_USER}
+      NODE_DB_PASSWORD: ${NODE_DB_PASSWORD}
+      NODE_DB_NAME: ${NODE_DB_NAME}
     depends_on:
       - db
     networks:
