@@ -117,7 +117,10 @@ func GenerateRecipe(c *gin.Context) {
 		- If invalid ingredients are detected, respond with:
 		  {"error": "Invalid or unsafe ingredient(s) detected. Recipe not generated."}
 
-		If all ingredients are valid, provide the recipe in this **EXACT** JSON format (no markdown, no extra text):
+		Additional rules:
+		- Detect the language of the ingredient list and use that language in the recipe response (e.g., if ingredients are in Indonesian, reply in Indonesian).
+		- If there is a typo in the recipe, cuisine, or dietary input, correct it automatically.
+		- Output the recipe in this **exact JSON format** (no markdown, no extra text):
 
 		{
 		  "name": "Recipe name",
