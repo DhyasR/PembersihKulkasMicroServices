@@ -53,6 +53,24 @@ app.get('/users', async (req, res) => {
   }
 });
 
+app.get('/users/:id', async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const [rows] = await connection.execute('SELECT * FROM users WHERE id = ?', [userId]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json(rows[0]);
+  } catch (err) {
+    console.error('❌ Error fetching user by ID:', err.message);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+
 (async () => {
   await connectWithRetry();
 

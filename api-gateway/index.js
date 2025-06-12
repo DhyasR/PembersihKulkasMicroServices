@@ -205,6 +205,10 @@ app.get('/users', (req, res) => {
   forwardRequest(req, res, PROFILE_SERVICE_URL, '/users');
 });
 
+app.get('/users/:id', (req, res) => {
+  forwardRequest(req, res, PROFILE_SERVICE_URL, `/users/${req.params.id}`);
+});
+
 // Profile service health check
 app.get('/profile/health', (req, res) => {
   forwardRequest(req, res, PROFILE_SERVICE_URL, '/');
