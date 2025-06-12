@@ -139,6 +139,25 @@ app.get('/recipes', async (req, res) => {
   }
 });
 
+// === SPOONACULAR RECIPE DETAIL ROUTE ===
+app.get('/recipes/:id', async (req, res) => {
+  const recipeId = req.params.id;
+
+  try {
+    const response = await axios.get(`https://api.spoonacular.com/recipes/${recipeId}/information`, {
+      params: {
+        apiKey: spoonacularKey,
+      },
+    });
+
+    res.json(response.data);
+  } catch (err) {
+    console.error(`❌ Failed to fetch recipe detail for ID ${recipeId}:`, err.message);
+    res.status(500).json({ error: 'Failed to fetch recipe details' });
+  }
+});
+
+
 // === CHAT SERVICE ROUTES (Port 8100) ===
 // Recipe management - FIXED: Remove /chat prefix
 app.post('/chat/recipes', (req, res) => {

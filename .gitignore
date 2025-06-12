@@ -136,3 +136,7 @@ Docker
 docker-compose.override.yml
 .dockerignore
 docker-compose..yml
+/api-gateway/node_modules
+/chat/node_modules
+/kulkasku/node_modules
+/profile/node_modules
