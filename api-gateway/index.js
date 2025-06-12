@@ -159,8 +159,12 @@ app.get('/recipes/:id', async (req, res) => {
 
 
 // === CHAT SERVICE ROUTES (Port 8100) ===
-// Recipe management - FIXED: Remove /chat prefix
+// Recipe management - Complete CRUD operations
 app.post('/chat/recipes', (req, res) => {
+  forwardRequest(req, res, CHAT_SERVICE_URL, '/recipes');
+});
+
+app.get('/chat/recipes', (req, res) => {
   forwardRequest(req, res, CHAT_SERVICE_URL, '/recipes');
 });
 
@@ -168,12 +172,20 @@ app.get('/chat/recipes/:id', (req, res) => {
   forwardRequest(req, res, CHAT_SERVICE_URL, `/recipes/${req.params.id}`);
 });
 
-// Image upload - FIXED: Remove /chat prefix
+app.put('/chat/recipes/:id', (req, res) => {
+  forwardRequest(req, res, CHAT_SERVICE_URL, `/recipes/${req.params.id}`);
+});
+
+app.delete('/chat/recipes/:id', (req, res) => {
+  forwardRequest(req, res, CHAT_SERVICE_URL, `/recipes/${req.params.id}`);
+});
+
+// Image upload
 app.post('/chat/upload', (req, res) => {
   forwardRequest(req, res, CHAT_SERVICE_URL, '/upload');
 });
 
-// Recipe generation - FIXED: Remove /chat prefix and validate request body
+// Recipe generation - AI-powered recipe creation
 app.post('/chat/recipes/generate', (req, res) => {
   // Validate request body structure
   const { ingredients, cuisine, diet } = req.body;
@@ -194,6 +206,11 @@ app.post('/chat/recipes/generate', (req, res) => {
   forwardRequest(req, res, CHAT_SERVICE_URL, '/recipes/generate');
 });
 
+// Health check for chat service
+app.get('/chat/health', (req, res) => {
+  forwardRequest(req, res, CHAT_SERVICE_URL, '/health');
+});
+
 // === KULKASKU SERVICE ROUTES (Port 8200) ===
 // Ingredient management
 app.post('/ingredients', (req, res) => {
@@ -202,6 +219,14 @@ app.post('/ingredients', (req, res) => {
 
 app.get('/ingredients', (req, res) => {
   forwardRequest(req, res, KULKASKU_SERVICE_URL, '/getingredients');
+});
+
+app.get('/ingredients/:id', (req, res) => {
+  forwardRequest(req, res, KULKASKU_SERVICE_URL, `/ingredients/${req.params.id}`);
+});
+
+app.put('/ingredients/:id', (req, res) => {
+  forwardRequest(req, res, KULKASKU_SERVICE_URL, `/ingredients/${req.params.id}`);
 });
 
 app.delete('/ingredients/:id', (req, res) => {
@@ -332,13 +357,18 @@ app.get('/', (req, res) => {
       spoonacular: 'GET /recipes?query=<search_term>',
       chat_service: {
         create_recipe: 'POST /chat/recipes',
+        list_recipes: 'GET /chat/recipes',
         get_recipe: 'GET /chat/recipes/:id',
+        update_recipe: 'PUT /chat/recipes/:id',
+        delete_recipe: 'DELETE /chat/recipes/:id',
         upload_image: 'POST /chat/upload',
         generate_recipe: 'POST /chat/recipes/generate'
       },
       kulkasku_service: {
         add_ingredient: 'POST /ingredients',
         get_ingredients: 'GET /ingredients?user_id=<user_id>',
+        get_ingredient_by_id: 'GET /ingredients/:id',
+        update_ingredient: 'PUT /ingredients/:id',
         delete_ingredient: 'DELETE /ingredients/:id',
         get_recipes_from_ingredients: 'GET /ingredients/recipes?user_id=<user_id>'
       },
@@ -347,6 +377,7 @@ app.get('/', (req, res) => {
       },
       health_checks: {
         gateway: 'GET /health',
+        chat: 'GET /chat/health',
         kulkasku: 'GET /kulkasku/health',
         profile: 'GET /profile/health'
       },
