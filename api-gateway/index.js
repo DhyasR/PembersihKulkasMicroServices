@@ -2,10 +2,16 @@ const express = require('express');
 const fs = require('fs');
 const axios = require('axios');
 
+const cors = require('cors');
 const app = express();
 const port = 8000;
 
-// Middleware to parse JSON bodies
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 app.use(express.json());
 
 // Read API key from Docker secret
