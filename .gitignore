@@ -7,10 +7,10 @@
 *.test
 *.out
 *.pid
-*.DS_Store
+*.DSStore
 *.swp
 *~
-._*
+.*
 
 ### Node.js ###
 node_modules/
@@ -53,6 +53,7 @@ secrets/
 openai_key.txt
 openai_key
 *.secret
+*.txt
 
 ### Environment Files ###
 .env

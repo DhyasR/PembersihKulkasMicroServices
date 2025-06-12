@@ -107,6 +107,39 @@ func DeleteIngredient(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+func UpdateIngredient(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	var updated Ingredient
+	if err := json.NewDecoder(r.Body).Decode(&updated); err != nil {
+		http.Error(w, "Invalid request", http.StatusBadRequest)
+		return
+	}
+
+	docRef := firestoreClient.Collection("ingredients").Doc(id)
+	_, err := docRef.Get(ctx)
+	if err != nil {
+		http.Error(w, "Ingredient not found", http.StatusNotFound)
+		return
+	}
+
+	updated.ID = id
+	if updated.AddedAt.IsZero() {
+		updated.AddedAt = time.Now()
+	}
+
+	_, err = docRef.Set(ctx, updated)
+	if err != nil {
+		http.Error(w, "Failed to update ingredient", http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(updated)
+}
+
 func GetRecipes(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
 	userID := r.URL.Query().Get("user_id")
@@ -141,6 +174,28 @@ func GetRecipes(w http.ResponseWriter, r *http.Request) {
 	io.Copy(w, resp.Body)
 }
 
+func GetIngredientByID(w http.ResponseWriter, r *http.Request) {
+	ctx := context.Background()
+	vars := mux.Vars(r)
+	id := vars["id"]
+
+	doc, err := firestoreClient.Collection("ingredients").Doc(id).Get(ctx)
+	if err != nil {
+		http.Error(w, "Ingredient not found", http.StatusNotFound)
+		return
+	}
+
+	var ing Ingredient
+	err = doc.DataTo(&ing)
+	if err != nil {
+		http.Error(w, "Failed to parse ingredient", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(ing)
+}
+
 func HealthCheck(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("OK"))
@@ -156,6 +211,9 @@ func main() {
 	router.HandleFunc("/ingredients/{id}", DeleteIngredient).Methods("DELETE")
 	router.HandleFunc("/recipes", GetRecipes).Methods("GET")
 	router.HandleFunc("/health", HealthCheck).Methods("GET")
+
+	router.HandleFunc("/ingredients/{id}", UpdateIngredient).Methods("PUT")
+	router.HandleFunc("/ingredients/{id}", GetIngredientByID).Methods("GET")
 
 	log.Println("kulkasku service running on port 8200")
 	log.Fatal(http.ListenAndServe(":8200", router))
