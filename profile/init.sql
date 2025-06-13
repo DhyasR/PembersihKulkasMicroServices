@@ -9,4 +9,4 @@ CREATE TABLE IF NOT EXISTS users (
 
 INSERT INTO users (name, email, password) VALUES
 ('Dhyas', 'dhyas@example.com', 'dhyas123'),
-('Aulia', 'aulia@example.com', 'aulia123'),
+('Aulia', 'aulia@example.com', 'aulia123');  
