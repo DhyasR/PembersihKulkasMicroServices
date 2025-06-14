@@ -105,6 +105,7 @@ func GenerateRecipe(c *gin.Context) {
 	prompt := fmt.Sprintf(
 		`You are a strict recipe generator. Only accept valid, edible, commonly available food ingredients. 
 		If any input contains inappropriate, unethical, or non-food items (e.g., human meat, plastic, soap), you must refuse to generate the recipe and respond with an error message.
+		If there is a typo in the recipe, cuisine, or diet input, please correct the typo, also use the same language as used in ingredients when sending the responds.
 
 		Generate a detailed recipe using ONLY these ingredients: %v.  
 		Cuisine style: %s.  
@@ -116,7 +117,11 @@ func GenerateRecipe(c *gin.Context) {
 		- If invalid ingredients are detected, respond with:
 		  {"error": "Invalid or unsafe ingredient(s) detected. Recipe not generated."}
 
-		If all ingredients are valid, provide the recipe in this **EXACT** JSON format (no markdown, no extra text):
+		Additional rules:
+		- Detect the language of the ingredient list and use that language in the recipe response (e.g., if ingredients are in Indonesian, reply in Indonesian).
+		- If there is a typo in the recipe, cuisine, or dietary input, correct it automatically.
+		- Make the recipes as detailed as possible
+		- Output the recipe in this **exact JSON format** (no markdown, no extra text):
 
 		{
 		  "name": "Recipe name",

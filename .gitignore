@@ -1,4 +1,4 @@
-### General ###
+General
 *.exe
 *.exe~
 *.dll
@@ -7,44 +7,44 @@
 *.test
 *.out
 *.pid
-*.DS_Store
+*.DSStore
 *.swp
 *~
-._*
+.*
 
-### Node.js ###
+Node.js
 node_modules/
 
-### Development Environments ###
+Development Environments
 .idea/
 .vscode/
 *.code-workspace
 .envrc
 
-### Go ###
-# Binaries
+Go
+Binaries
 /bin/
 /out/
 /artifacts/
 
-# Dependency directories
+Dependency directories
 vendor/
 /go/pkg/
 /go/bin/
 
-# Go workspace and module files
+Go workspace and module files
 go.work
 go.work.sum
 
-### Firebase ###
-# Service account credentials
-*.json
+Firebase
+Service account credentials
+.json
 /serviceAccountKey.json
 /firebase-config.json
-firebase-adminsdk*.json
+firebase-adminsdk.json
 /google-credentials.json
 
-### Secrets ###
+Secrets
 secrets/
 *.key
 *.pem
@@ -52,11 +52,11 @@ secrets/
 *.crt
 openai_key.txt
 openai_key
-*.secret
+.secret
 
-### Environment Files ###
+Environment Files
 .env
-.env.*
+.env.
 !.env.example
 local.env
 .env.local*
@@ -64,19 +64,19 @@ local.env
 .env.test*
 .env.production*
 
-### Uploads ###
+Uploads
 /uploads/
 !/uploads/.gitkeep
 *.upload
 *.tmp
 
-### Logs ###
+Logs
 *.log
 logs/
 *.logs
 *.trace
 
-### Build Output ###
+Build Output
 /dist/
 /build/
 /release/
@@ -84,20 +84,20 @@ logs/
 *.lib
 *.o
 
-### IDE Specific ###
-# JetBrains
+IDE Specific
+JetBrains
 *.iml
 *.ipr
 *.iws
 .idea_modules/
 
-# VS Code
+VS Code
 .settings/
 .history/
 .vscode/settings.json
 .vscode/launch.json
 
-### OS Generated ###
+OS Generated
 Thumbs.db
 ehthumbs.db
 Desktop.ini
@@ -109,30 +109,34 @@ $RECYCLE.BIN/
 .Trashes
 .VolumeIcon.icns
 
-### Test Files ###
+Test Files
 _coverage/
 *.cover
 *.prof
 *.profile
 
-### Documentation ###
+Documentation
 /docs/_build/
 /site/
 *.pyc
-__pycache__/
+pycache/
 
-### Editor temp files ###
-*.sublime-*
+Editor temp files
+.sublime-
 *.komodoproject
 *.kdev4
-*.sw?
+.sw?
 
-### System Files ###
+System Files
 .DS_Store
 .AppleDouble
 .LSOverride
 
-### Docker ###
+Docker
 docker-compose.override.yml
 .dockerignore
-docker-compose.*.yml
+docker-compose..yml
+/api-gateway/node_modules
+/chat/node_modules
+/kulkasku/node_modules
+/profile/node_modules

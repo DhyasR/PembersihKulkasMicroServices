@@ -1,9 +1,41 @@
+# version: '3.8'
+
+# services:
+#   api_gateway:
+#     image: node:alpine
+#     container_name: api_gateway
+#     restart: always
+#     working_dir: /app
+#     volumes:
+#       - .:/app
+#     ports:
+#       - "8000:8000"
+#     command: sh -c "npm install && npm start"
+#     secrets:
+#       - spoonacular_key
+#     environment:
+#       - NODE_ENV=development
+
+# secrets:
+#   spoonacular_key:
+#     file: ./spoonacular_key.txt
+
+# volumes:
+#   db_data:
+
+
+# networks:
+#   app_network:
+#     name: app_network
+#   profile_network:
+#     name: profile_network
+
 version: '3.8'
 
 services:
   api_gateway:
-    image: node
-    container_name: homepage
+    image: node:alpine
+    container_name: api_gateway
     restart: always
     working_dir: /app
     volumes:
@@ -13,16 +45,18 @@ services:
     command: sh -c "npm install && npm start"
     secrets:
       - spoonacular_key
+      - youtube_key
     environment:
       - NODE_ENV=development
 
 secrets:
   spoonacular_key:
     file: ./spoonacular_key.txt
+  youtube_key:
+    file: ./youtube_key.txt
 
 volumes:
   db_data:
-
 
 networks:
   app_network:
